@@ -12,10 +12,6 @@ export default function App() {
   const [tab, setTab] = useState("home");
   const T = theme === "dark" ? DARK : LIGHT;
 
-  function go(t) {
-    setTab(t);
-  }
-
   return (
     <div
       style={{
@@ -40,7 +36,7 @@ export default function App() {
       >
         <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
           <AnimatePresence mode="wait" initial={false}>
-            {tab === "home" && <Home key="home" T={T} go={go} />}
+            {tab === "home" && <Home key="home" T={T} go={setTab} />}
             {tab === "modules" && <Modules key="modules" T={T} />}
             {tab === "journey" && <Journey key="journey" T={T} />}
             {tab === "profile" && (
@@ -48,8 +44,7 @@ export default function App() {
             )}
           </AnimatePresence>
         </div>
-
-        <Nav tab={tab} go={go} T={T} />
+        <Nav tab={tab} go={setTab} T={T} />
       </div>
     </div>
   );
