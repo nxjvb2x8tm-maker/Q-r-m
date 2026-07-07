@@ -2,10 +2,10 @@ import { motion, LayoutGroup } from "framer-motion";
 import { spring } from "../theme.js";
 
 const ITEMS = [
-  { k: "home",    l: "Главная", icon: "🏠" },
-  { k: "modules", l: "Модули",  icon: "📚" },
-  { k: "journey", l: "Путь",    icon: "🗺️" },
-  { k: "profile", l: "Профиль", icon: "👤" },
+  { k: "journey",  l: "Путь",      icon: "🗺️" },
+  { k: "modules",  l: "Модули",    icon: "📚" },
+  { k: "results",  l: "Результат", icon: "📊" },
+  { k: "settings", l: "Настройки", icon: "⚙️" },
 ];
 
 export default function Nav({ tab, go, T }) {
