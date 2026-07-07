@@ -2,14 +2,14 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { DARK, LIGHT } from "./theme.js";
 import Nav from "./components/Nav.jsx";
-import Home from "./screens/Home.jsx";
-import Modules from "./screens/Modules.jsx";
 import Journey from "./screens/Journey.jsx";
-import Profile from "./screens/Profile.jsx";
+import Modules from "./screens/Modules.jsx";
+import Results from "./screens/Results.jsx";
+import Settings from "./screens/Settings.jsx";
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
-  const [tab, setTab] = useState("home");
+  const [tab, setTab] = useState("journey");
   const T = theme === "dark" ? DARK : LIGHT;
 
   return (
@@ -36,11 +36,11 @@ export default function App() {
       >
         <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
           <AnimatePresence mode="wait" initial={false}>
-            {tab === "home" && <Home key="home" T={T} go={setTab} />}
-            {tab === "modules" && <Modules key="modules" T={T} />}
             {tab === "journey" && <Journey key="journey" T={T} />}
-            {tab === "profile" && (
-              <Profile key="profile" T={T} theme={theme} setTheme={setTheme} />
+            {tab === "modules" && <Modules key="modules" T={T} />}
+            {tab === "results" && <Results key="results" T={T} go={setTab} />}
+            {tab === "settings" && (
+              <Settings key="settings" T={T} theme={theme} setTheme={setTheme} />
             )}
           </AnimatePresence>
         </div>

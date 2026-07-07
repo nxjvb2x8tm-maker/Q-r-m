@@ -18,7 +18,7 @@ const ITEM = {
 
 const DAYS = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-export default function Home({ T, go }) {
+export default function Results({ T, go }) {
   const streakActive = [false, false, false, false, false, false, true];
   const weekBars = [0, 0, 0, 0, 0, 0, 4];
   const maxBar = 4;
@@ -71,14 +71,20 @@ export default function Home({ T, go }) {
           variants={ITEM}
           style={{
             color: T.text,
-            fontSize: 15,
+            fontSize: 22,
             fontWeight: 900,
-            margin: "0 0 16px",
+            margin: "0 0 2px",
             letterSpacing: 0.2,
           }}
         >
-          Q | Til ile qırımtatarcanı ögren ✨
+          Результат 📊
         </motion.h2>
+        <motion.p
+          variants={ITEM}
+          style={{ color: T.text2, fontSize: 13, margin: "0 0 16px" }}
+        >
+          Твой уровень, успехи и прогресс
+        </motion.p>
 
         {/* Уровень — фиолетовая карточка */}
         <motion.div
@@ -292,7 +298,7 @@ export default function Home({ T, go }) {
           variants={ITEM}
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => go("modules")}
+          onClick={() => go("journey")}
           style={{
             background: T.card,
             borderRadius: 18,
@@ -382,6 +388,91 @@ export default function Home({ T, go }) {
               </p>
             </motion.div>
           ))}
+        </motion.div>
+
+        {/* Правильные / Ошибки */}
+        <motion.div
+          variants={ITEM}
+          style={{
+            background: T.card,
+            borderRadius: 20,
+            padding: "15px 16px",
+            marginBottom: 12,
+            border: `1px solid ${T.border}`,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <p style={{ color: T.text, fontSize: 13, fontWeight: 800, margin: 0 }}>
+              Правильные и ошибки
+            </p>
+            <span style={{ color: T.text2, fontSize: 10 }}>за всё время</span>
+          </div>
+          {(() => {
+            const correct = 0;
+            const wrong = 0;
+            const total = correct + wrong;
+            const correctPct = total ? Math.round((correct / total) * 100) : 0;
+            const wrongPct = total ? 100 - correctPct : 0;
+            return (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    height: 10,
+                    borderRadius: 100,
+                    overflow: "hidden",
+                    background: T.card2,
+                    marginBottom: 12,
+                  }}
+                >
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${correctPct}%` }}
+                    transition={{ delay: 0.4, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ background: T.green }}
+                  />
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${wrongPct}%` }}
+                    transition={{ delay: 0.5, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ background: T.red }}
+                  />
+                </div>
+                <div style={{ display: "flex", gap: 9 }}>
+                  {[
+                    { l: "Правильные", v: `${correctPct}%`, n: correct, c: T.green, e: "✅" },
+                    { l: "Ошибки", v: `${wrongPct}%`, n: wrong, c: T.red, e: "❌" },
+                  ].map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        flex: 1,
+                        background: T.card2,
+                        borderRadius: 14,
+                        padding: "11px 12px",
+                        border: `1px solid ${T.border}`,
+                      }}
+                    >
+                      <div style={{ fontSize: 15, marginBottom: 3 }}>{item.e}</div>
+                      <p style={{ color: item.c, fontSize: 17, fontWeight: 900, margin: "0 0 1px" }}>
+                        {item.v}
+                      </p>
+                      <p style={{ color: T.text2, fontSize: 10, fontWeight: 700, margin: 0 }}>
+                        {item.l} · {item.n}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            );
+          })()}
         </motion.div>
 
         {/* График */}
