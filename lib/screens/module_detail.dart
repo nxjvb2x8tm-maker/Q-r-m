@@ -52,7 +52,7 @@ class ModuleDetailScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(18, 8, 18, 8),
                 child: LafCard(
                   gradient: LinearGradient(
-                    colors: [color, color.withOpacity(0.72)],
+                    colors: [color, color.withValues(alpha: 0.72)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -69,7 +69,7 @@ class ModuleDetailScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(module.sub,
                           style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 13.5,
                               fontWeight: FontWeight.w600)),
                       const SizedBox(height: 16),
@@ -180,7 +180,7 @@ class _Badge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -215,7 +215,7 @@ class _WordRow extends StatelessWidget {
             width: 34,
             height: 34,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.14),
+              color: color.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(11),
             ),
             child: Center(

@@ -120,14 +120,14 @@ class _ModuleBanner extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [module.color, module.color.withOpacity(0.7)],
+                colors: [module.color, module.color.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(22),
               boxShadow: [
                 BoxShadow(
-                  color: module.color.withOpacity(0.4),
+                  color: module.color.withValues(alpha: 0.4),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -139,7 +139,7 @@ class _ModuleBanner extends StatelessWidget {
                   width: 46,
                   height: 46,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.22),
+                    color: Colors.white.withValues(alpha: 0.22),
                     borderRadius: BorderRadius.circular(14),
                   ),
                   child: Center(
@@ -163,7 +163,7 @@ class _ModuleBanner extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(module.subtitle,
                           style: TextStyle(
-                              color: Colors.white.withOpacity(0.85),
+                              color: Colors.white.withValues(alpha: 0.85),
                               fontSize: 12.5,
                               fontWeight: FontWeight.w600)),
                     ],
@@ -221,7 +221,7 @@ class _LessonPath extends StatelessWidget {
                     painter: _PathPainter(
                       positions: positions,
                       color: t.border,
-                      completedColor: refs.first.module.color.withOpacity(0.55),
+                      completedColor: refs.first.module.color.withValues(alpha: 0.55),
                       completedUntil: app.completedLessons,
                       refs: refs,
                     ),
@@ -321,20 +321,20 @@ class _LessonNode extends StatelessWidget {
         gradient: locked
             ? null
             : LinearGradient(
-                colors: [color, color.withOpacity(0.72)],
+                colors: [color, color.withValues(alpha: 0.72)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
         color: locked ? t.card2 : null,
         border: Border.all(
-          color: locked ? t.border : Colors.white.withOpacity(0.35),
+          color: locked ? t.border : Colors.white.withValues(alpha: 0.35),
           width: 3,
         ),
         boxShadow: locked
             ? null
             : [
                 BoxShadow(
-                  color: color.withOpacity(0.5),
+                  color: color.withValues(alpha: 0.5),
                   blurRadius: 18,
                   offset: const Offset(0, 8),
                 ),
@@ -379,7 +379,7 @@ class _CurrentBadge extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
-          BoxShadow(color: color.withOpacity(0.5), blurRadius: 10),
+          BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 10),
         ],
       ),
       child: const Text('СТАРТ',
@@ -404,14 +404,15 @@ class _Bounce extends StatefulWidget {
 }
 
 class _BounceState extends State<_Bounce> with SingleTickerProviderStateMixin {
-  late final AnimationController _c = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1400),
-  );
+  late final AnimationController _c;
 
   @override
   void initState() {
     super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1400),
+    );
     if (widget.active) _c.repeat(reverse: true);
   }
 

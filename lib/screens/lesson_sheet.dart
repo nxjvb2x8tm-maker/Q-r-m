@@ -52,13 +52,13 @@ class _LessonSheet extends StatelessWidget {
             height: 68,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color, color.withOpacity(0.7)],
+                colors: [color, color.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
-                BoxShadow(color: color.withOpacity(0.45), blurRadius: 18, offset: const Offset(0, 8)),
+                BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 18, offset: const Offset(0, 8)),
               ],
             ),
             child: Icon(ref.lesson.type.icon, color: Colors.white, size: 34),

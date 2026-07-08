@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Дизайн-токены «Laf et» — перенесены из HTML-прототипа.
 class LafPalette {
@@ -89,7 +88,8 @@ class LafPalette {
 
 ThemeData buildLafTheme(LafPalette t) {
   final base = t.isDark ? ThemeData.dark() : ThemeData.light();
-  final textTheme = GoogleFonts.nunitoTextTheme(base.textTheme).apply(
+  final textTheme = base.textTheme.apply(
+    fontFamily: 'Nunito',
     bodyColor: t.text,
     displayColor: t.text,
   );

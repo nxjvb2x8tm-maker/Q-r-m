@@ -88,12 +88,12 @@ class _AmbientBackground extends StatelessWidget {
           Positioned(
             top: -120,
             right: -80,
-            child: _Blob(color: palette.accent.withOpacity(0.18)),
+            child: _Blob(color: palette.accent.withValues(alpha: 0.18)),
           ),
           Positioned(
             bottom: 40,
             left: -110,
-            child: _Blob(color: palette.teal.withOpacity(0.14)),
+            child: _Blob(color: palette.teal.withValues(alpha: 0.14)),
           ),
           Positioned.fill(child: child),
         ],
@@ -116,7 +116,7 @@ class _Blob extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           gradient: RadialGradient(
-            colors: [color, color.withOpacity(0)],
+            colors: [color, color.withValues(alpha: 0)],
           ),
         ),
       ),

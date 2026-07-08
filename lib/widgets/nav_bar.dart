@@ -33,7 +33,7 @@ class LafNavBar extends StatelessWidget {
             child: Container(
               height: 68,
               decoration: BoxDecoration(
-                color: t.card.withOpacity(t.isDark ? 0.72 : 0.82),
+                color: t.card.withValues(alpha: t.isDark ? 0.72 : 0.82),
                 borderRadius: BorderRadius.circular(26),
                 border: Border.all(color: t.border),
                 boxShadow: [
@@ -98,7 +98,7 @@ class _NavButton extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: active
                 ? LinearGradient(
-                    colors: [palette.accent, palette.accent.withOpacity(0.78)],
+                    colors: [palette.accent, palette.accent.withValues(alpha: 0.78)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
@@ -107,7 +107,7 @@ class _NavButton extends StatelessWidget {
             boxShadow: active
                 ? [
                     BoxShadow(
-                      color: palette.accent.withOpacity(0.45),
+                      color: palette.accent.withValues(alpha: 0.45),
                       blurRadius: 16,
                       offset: const Offset(0, 6),
                     ),

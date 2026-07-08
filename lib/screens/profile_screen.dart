@@ -69,7 +69,7 @@ class _ProfileHeader extends StatelessWidget {
                     end: Alignment.bottomRight,
                   ),
                   boxShadow: [
-                    BoxShadow(color: t.accent.withOpacity(0.4), blurRadius: 18, offset: const Offset(0, 8)),
+                    BoxShadow(color: t.accent.withValues(alpha: 0.4), blurRadius: 18, offset: const Offset(0, 8)),
                   ],
                 ),
                 child: Center(
@@ -225,7 +225,6 @@ class _ThemeToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = app.palette;
     return LafCard(
       padding: const EdgeInsets.all(8),
       child: Row(
@@ -435,7 +434,7 @@ class _SettingRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(11),
             ),
             child: Icon(icon, color: color, size: 20),

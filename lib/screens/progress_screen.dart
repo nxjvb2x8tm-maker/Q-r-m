@@ -157,7 +157,7 @@ class _MiniStat extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(9),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(13),
             ),
             child: Icon(icon, color: color, size: 20),
@@ -301,7 +301,7 @@ class _WeeklyChart extends StatelessWidget {
                                   end: Alignment.bottomCenter,
                                   colors: [
                                     palette.accent,
-                                    palette.accent.withOpacity(0.5),
+                                    palette.accent.withValues(alpha: 0.5),
                                   ],
                                 ),
                                 borderRadius: BorderRadius.circular(8),

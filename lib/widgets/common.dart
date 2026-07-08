@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../state/app_state.dart';
-import '../theme/app_theme.dart';
 
 /// Премиальная карточка с мягкой тенью и скруглением.
 class LafCard extends StatelessWidget {
@@ -168,9 +167,9 @@ class StatPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.14),
+        color: color.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.25)),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -281,7 +280,7 @@ class _RingPainter extends CustomPainter {
       ..shader = SweepGradient(
         startAngle: -math.pi / 2,
         endAngle: -math.pi / 2 + sweep + 0.001,
-        colors: [color.withOpacity(0.65), color],
+        colors: [color.withValues(alpha: 0.65), color],
       ).createShader(rect);
     canvas.drawArc(rect, -math.pi / 2, sweep, false, arcPaint);
   }
@@ -322,7 +321,7 @@ class LafProgressBar extends StatelessWidget {
                 height: height,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [color.withOpacity(0.7), color],
+                    colors: [color.withValues(alpha: 0.7), color],
                   ),
                 ),
               ),

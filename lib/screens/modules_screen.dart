@@ -18,7 +18,6 @@ class _ModulesScreenState extends State<ModulesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppScope.of(context).palette;
     final visible = _filter == null
         ? catalogModules
         : catalogModules.where((m) => m.type == _filter).toList();
@@ -84,7 +83,7 @@ class _FilterBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: active ? color : t.border),
                 boxShadow: active
-                    ? [BoxShadow(color: color.withOpacity(0.35), blurRadius: 12, offset: const Offset(0, 4))]
+                    ? [BoxShadow(color: color.withValues(alpha: 0.35), blurRadius: 12, offset: const Offset(0, 4))]
                     : null,
               ),
               child: Text(chips[i].$2,
@@ -119,13 +118,13 @@ class _ModuleTile extends StatelessWidget {
             height: 54,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [color, color.withOpacity(0.7)],
+                colors: [color, color.withValues(alpha: 0.7)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
-                BoxShadow(color: color.withOpacity(0.4), blurRadius: 12, offset: const Offset(0, 6)),
+                BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 12, offset: const Offset(0, 6)),
               ],
             ),
             child: Icon(module.type.icon, color: Colors.white, size: 26),

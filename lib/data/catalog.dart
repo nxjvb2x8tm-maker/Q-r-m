@@ -62,7 +62,7 @@ final List<CatalogModule> catalogModules = [
   const CatalogModule('Til bilgisi · Elifbe',
       '1. Bölük · Алфавит и гармония гласных', 30, ModType.grammar,
       progress: 0.85),
-  CatalogModule('Luğat · Temel sözler', '1. Bölük · 24 базовых слова', 24,
+  const CatalogModule('Luğat · Temel sözler', '1. Bölük · 24 базовых слова', 24,
       ModType.vocab,
       progress: 0.6, wordList: words1),
   const CatalogModule(
@@ -72,7 +72,7 @@ final List<CatalogModule> catalogModules = [
       'Vazifeler 2', '1. Bölük · Söz qur + Muqayese', 25, ModType.task,
       progress: 0.15),
   // ── 2. Bölük · Meraba ──
-  CatalogModule('Luğat · Selâmlaşuv', '2. Bölük · Приветствия и знакомство',
+  const CatalogModule('Luğat · Selâmlaşuv', '2. Bölük · Приветствия и знакомство',
       20, ModType.vocab,
       progress: 0.1, wordList: words2),
   const CatalogModule(
@@ -84,7 +84,7 @@ final List<CatalogModule> catalogModules = [
   const CatalogModule('Yazuv · Öz dialogıñ',
       '2. Bölük · Vazife 5 · Напиши свой диалог', 0, ModType.writing),
   // ── 3. Bölük · Bu ne? O kim? ──
-  CatalogModule('Luğat · Eşyalar & İnsanlar', '3. Bölük · Предметы и люди',
+  const CatalogModule('Luğat · Eşyalar & İnsanlar', '3. Bölük · Предметы и люди',
       30, ModType.vocab,
       wordList: words3),
   const CatalogModule('Luğat · Yerler & Tabiat',
