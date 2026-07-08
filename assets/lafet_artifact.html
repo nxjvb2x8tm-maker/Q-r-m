@@ -1,0 +1,462 @@
+<title>Laf et — прототип</title>
+<style>
+  :root{
+    --blue:#1a3a52;
+    --blue-soft:#2b5674;
+    --gold:#D4AF37;
+    --gold-soft:#e7c765;
+    --ink:#12212e;
+    --muted:#6b7a88;
+    --line:rgba(26,58,82,.10);
+    --card:#ffffff;
+    --shadow:0 10px 30px rgba(26,58,82,.10);
+    --shadow-hover:0 16px 40px rgba(26,58,82,.18);
+    --radius:20px;
+
+    /* Stage (behind the phone) — theme aware */
+    --stage:
+      radial-gradient(1200px 600px at 20% 0%, #efe3ff 0%, transparent 55%),
+      radial-gradient(1000px 700px at 100% 100%, #ffe6cf 0%, transparent 55%),
+      linear-gradient(135deg,#f3eefc 0%,#fdf2ea 100%);
+    --stage-note:#7a6c8f;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --stage:
+        radial-gradient(1100px 600px at 15% 0%, #21304a 0%, transparent 55%),
+        radial-gradient(1000px 700px at 100% 100%, #3a2740 0%, transparent 55%),
+        linear-gradient(135deg,#0c1622 0%,#141019 100%);
+      --stage-note:#9aa6c0;
+    }
+  }
+  :root[data-theme="light"]{
+    --stage:
+      radial-gradient(1200px 600px at 20% 0%, #efe3ff 0%, transparent 55%),
+      radial-gradient(1000px 700px at 100% 100%, #ffe6cf 0%, transparent 55%),
+      linear-gradient(135deg,#f3eefc 0%,#fdf2ea 100%);
+    --stage-note:#7a6c8f;
+  }
+  :root[data-theme="dark"]{
+    --stage:
+      radial-gradient(1100px 600px at 15% 0%, #21304a 0%, transparent 55%),
+      radial-gradient(1000px 700px at 100% 100%, #3a2740 0%, transparent 55%),
+      linear-gradient(135deg,#0c1622 0%,#141019 100%);
+    --stage-note:#9aa6c0;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+  .stage{
+    min-height:100vh;width:100%;
+    font-family:"Segoe UI",Arial,system-ui,sans-serif;
+    background:var(--stage);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:16px;padding:28px 16px;
+  }
+  .stage .caption{
+    color:var(--stage-note);font-size:13px;font-weight:700;letter-spacing:.3px;text-align:center;
+    display:flex;align-items:center;gap:8px;
+  }
+  .stage .caption b{color:var(--stage-note);}
+
+  /* ── Phone frame ── */
+  .phone{
+    position:relative;
+    width:390px;height:790px;max-width:94vw;
+    background:#f6f7fb;
+    border-radius:38px;
+    box-shadow:0 30px 80px rgba(10,20,30,.45), 0 0 0 10px #101a24, 0 0 0 12px #26333f;
+    overflow:hidden;display:flex;flex-direction:column;
+  }
+  .notch{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:150px;height:26px;background:#101a24;
+    border-bottom-left-radius:16px;border-bottom-right-radius:16px;z-index:40;
+  }
+  .statusbar{
+    height:44px;flex:0 0 44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;font-size:13px;font-weight:700;color:var(--blue);z-index:30;
+  }
+  .statusbar .brand{display:flex;gap:6px;align-items:center;}
+  .statusbar .brand i{width:6px;height:6px;border-radius:50%;background:var(--blue);opacity:.85;font-style:normal;}
+
+  .viewport{position:relative;flex:1;overflow:hidden;}
+  .screen{
+    position:absolute;inset:0;overflow-y:auto;padding:6px 18px 96px;
+    opacity:0;transform:translateY(10px);pointer-events:none;
+    transition:opacity .32s ease, transform .32s ease;-webkit-overflow-scrolling:touch;
+  }
+  .screen.active{opacity:1;transform:translateY(0);pointer-events:auto;}
+  .screen::-webkit-scrollbar{width:0;}
+
+  .head{padding:6px 2px 14px;}
+  .head h1{font-size:25px;color:var(--ink);letter-spacing:-.4px;}
+  .head p{font-size:13.5px;color:var(--muted);margin-top:3px;font-weight:600;}
+  .kicker{font-size:12px;font-weight:800;letter-spacing:1.4px;color:var(--muted);
+    text-transform:uppercase;margin:18px 2px 10px;}
+
+  .card{
+    background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+    border:1px solid var(--line);padding:16px;transition:box-shadow .2s ease, transform .12s ease;
+  }
+  .tappable{cursor:pointer;}
+  .tappable:hover{box-shadow:var(--shadow-hover);}
+  .tappable:active{transform:scale(.985);}
+  .tappable:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  .level{display:flex;align-items:center;gap:15px;margin-bottom:14px;}
+  .level .ic{
+    width:58px;height:58px;flex:0 0 58px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+    font-size:26px;color:#fff;box-shadow:0 8px 18px rgba(26,58,82,.22);
+  }
+  .level .body{flex:1;min-width:0;}
+  .level .body .row1{display:flex;justify-content:space-between;align-items:baseline;}
+  .level .body h3{font-size:17px;color:var(--ink);}
+  .level .body .lessons{font-size:12.5px;color:var(--muted);font-weight:700;}
+  .level .pct{font-size:15px;font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums;}
+  .level .arrow{color:var(--muted);font-size:20px;margin-left:2px;}
+
+  .bar{height:9px;border-radius:9px;background:#eef1f6;overflow:hidden;margin-top:10px;}
+  .bar > i{display:block;height:100%;border-radius:9px;
+    background:linear-gradient(90deg,var(--blue),var(--blue-soft));
+    width:0;transition:width 1s cubic-bezier(.2,.7,.2,1);}
+  .bar.gold > i{background:linear-gradient(90deg,var(--gold),var(--gold-soft));}
+
+  .hero{
+    background:linear-gradient(135deg,var(--blue),#0f2636);
+    color:#fff;border-radius:26px;padding:24px;box-shadow:0 18px 40px rgba(26,58,82,.35);
+    position:relative;overflow:hidden;
+  }
+  .hero::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;
+    background:radial-gradient(circle,rgba(212,175,55,.35),transparent 70%);}
+  .hero .big{font-size:56px;font-weight:800;letter-spacing:-2px;line-height:1;font-variant-numeric:tabular-nums;}
+  .hero .big span{font-size:26px;color:var(--gold-soft);}
+  .hero .sub{font-size:14px;opacity:.85;margin-top:4px;font-weight:600;}
+  .hero .bar{background:rgba(255,255,255,.18);margin-top:16px;height:11px;}
+  .hero .bar > i{background:linear-gradient(90deg,var(--gold),var(--gold-soft));}
+
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .stat{padding:16px 10px;text-align:center;}
+  .stat .n{font-size:24px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;}
+  .stat .u{font-size:11.5px;color:var(--muted);font-weight:700;margin-top:2px;}
+  .stat .e{font-size:22px;margin-bottom:6px;display:block;}
+
+  .weekbars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:6px;}
+  .weekbars .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end;}
+  .weekbars .col i{width:60%;border-radius:8px;background:linear-gradient(180deg,var(--blue),var(--blue-soft));}
+  .weekbars .col small{font-size:10.5px;color:var(--muted);font-weight:700;}
+
+  .mod-group{margin-bottom:6px;}
+  .lesson{display:flex;align-items:center;gap:13px;padding:13px 14px;margin-bottom:10px;}
+  .lesson .num{
+    width:38px;height:38px;flex:0 0 38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-soft));
+  }
+  .lesson.done .num{background:linear-gradient(135deg,var(--gold),var(--gold-soft));}
+  .lesson .info{flex:1;min-width:0;}
+  .lesson .info h4{font-size:14.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lesson .info small{font-size:12px;color:var(--muted);font-weight:600;}
+  .lesson .chev{color:var(--muted);font-size:18px;}
+
+  .profile-head{display:flex;flex-direction:column;align-items:center;padding:26px 16px;}
+  .avatar{
+    width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:40px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--blue),var(--gold));
+    box-shadow:0 14px 30px rgba(26,58,82,.30);
+  }
+  .profile-head h2{margin-top:14px;font-size:22px;color:var(--ink);}
+  .badge{margin-top:8px;padding:6px 16px;border-radius:20px;background:rgba(26,58,82,.08);
+    color:var(--blue);font-size:13px;font-weight:800;}
+  .setting{display:flex;align-items:center;gap:14px;padding:15px 14px;}
+  .setting + .setting{border-top:1px solid var(--line);}
+  .setting .si{width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:flex;align-items:center;
+    justify-content:center;font-size:19px;background:rgba(26,58,82,.07);}
+  .setting .sl{flex:1;font-size:15px;font-weight:700;color:var(--ink);}
+  .setting .sv{font-size:13px;color:var(--muted);font-weight:700;}
+  .switch{width:46px;height:27px;border-radius:20px;background:#d7dde4;position:relative;transition:background .2s;cursor:pointer;flex:0 0 46px;border:none;}
+  .switch::after{content:"";position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;
+    box-shadow:0 2px 5px rgba(0,0,0,.2);transition:left .2s;}
+  .switch.on{background:var(--blue);}
+  .switch.on::after{left:22px;}
+  .switch:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .logout{width:100%;margin-top:16px;padding:15px;border:none;border-radius:16px;background:rgba(224,86,85,.10);
+    color:#d64545;font-weight:800;font-size:15px;cursor:pointer;transition:background .2s;}
+  .logout:hover{background:rgba(224,86,85,.18);}
+
+  .nav{
+    position:absolute;left:16px;right:16px;bottom:14px;height:66px;z-index:35;
+    background:rgba(255,255,255,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-radius:22px;border:1px solid var(--line);box-shadow:0 14px 34px rgba(26,58,82,.18);
+    display:flex;align-items:center;justify-content:space-around;padding:0 8px;
+  }
+  .nav button{
+    flex:1;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:8px 4px;border-radius:16px;color:var(--muted);font-weight:700;font-size:11px;transition:all .25s;
+    font-family:inherit;
+  }
+  .nav button .ni{font-size:20px;line-height:1;}
+  .nav button.active{color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-soft));
+    box-shadow:0 8px 18px rgba(26,58,82,.35);}
+  .nav button:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  .sheet-mask{position:absolute;inset:0;background:rgba(18,33,46,.45);opacity:0;pointer-events:none;
+    transition:opacity .28s;z-index:50;}
+  .sheet-mask.show{opacity:1;pointer-events:auto;}
+  .sheet{
+    position:absolute;left:0;right:0;bottom:0;z-index:51;background:#fff;
+    border-top-left-radius:26px;border-top-right-radius:26px;padding:14px 22px 28px;
+    transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.2,1);
+    max-height:82%;overflow-y:auto;box-shadow:0 -12px 40px rgba(26,58,82,.25);
+  }
+  .sheet.show{transform:translateY(0);}
+  .sheet .grip{width:44px;height:5px;border-radius:3px;background:#dfe4ea;margin:0 auto 18px;}
+  .sheet .s-ic{width:64px;height:64px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+    font-size:30px;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-soft));margin-bottom:14px;
+    box-shadow:0 10px 24px rgba(26,58,82,.28);}
+  .sheet h3{font-size:21px;color:var(--ink);}
+  .sheet .s-meta{font-size:13px;color:var(--muted);font-weight:700;margin-top:4px;}
+  .sheet p.desc{margin-top:14px;font-size:14px;line-height:1.55;color:#41525f;}
+  .word-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);}
+  .word-row b{font-size:15px;color:var(--ink);}
+  .word-row span{font-size:13.5px;color:var(--muted);font-weight:600;}
+  .s-btn{width:100%;margin-top:20px;padding:15px;border:none;border-radius:16px;font-family:inherit;
+    background:linear-gradient(135deg,var(--blue),var(--blue-soft));color:#fff;font-weight:800;font-size:16px;cursor:pointer;}
+  .s-btn.gold{background:linear-gradient(135deg,var(--gold),#c99a1f);}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;}
+  }
+</style>
+
+<div class="stage">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="statusbar">
+      <span id="clock">9:41</span>
+      <span class="brand"><i></i><i></i><i></i>&nbsp;<b>Laf et</b></span>
+      <span>51% ⚡</span>
+    </div>
+
+    <div class="viewport">
+      <!-- SCREEN 1 · JOURNEY -->
+      <section class="screen active" id="s-journey">
+        <div class="head">
+          <h1>Yol · Путь 🧭</h1>
+          <p>Выбери уровень и продолжай обучение</p>
+        </div>
+        <div id="levelList"></div>
+        <div class="kicker">Ежедневная цель</div>
+        <div class="card" style="display:flex;align-items:center;gap:14px;">
+          <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--gold-soft));display:flex;align-items:center;justify-content:center;font-size:24px;">🔥</div>
+          <div style="flex:1">
+            <div style="font-weight:800;color:var(--ink);font-size:15px;">Серия 12 дней</div>
+            <div style="font-size:12.5px;color:var(--muted);font-weight:600;">Позанимайся сегодня 15 минут</div>
+          </div>
+          <div style="font-size:24px;font-weight:800;color:var(--gold);">12</div>
+        </div>
+      </section>
+
+      <!-- SCREEN 2 · PROGRESS -->
+      <section class="screen" id="s-progress">
+        <div class="head">
+          <h1>Ösüş · Прогресс 📊</h1>
+          <p>Твоя статистика вживую</p>
+        </div>
+        <div class="hero">
+          <div class="big" id="overallBig">40<span>%</span></div>
+          <div class="sub">Общий прогресс курса — A1 · Kencetay</div>
+          <div class="bar"><i id="overallBar"></i></div>
+        </div>
+        <div class="kicker">Ключевые показатели</div>
+        <div class="stat-grid">
+          <div class="card stat"><span class="e">✅</span><div class="n">19</div><div class="u">уроков</div></div>
+          <div class="card stat"><span class="e">🔥</span><div class="n">12</div><div class="u">дней подряд</div></div>
+          <div class="card stat"><span class="e">📖</span><div class="n">347</div><div class="u">слов</div></div>
+        </div>
+        <div class="kicker">По уровням</div>
+        <div class="card" id="progressPerLevel"></div>
+        <div class="kicker">Активность за неделю</div>
+        <div class="card"><div class="weekbars" id="weekbars"></div></div>
+      </section>
+
+      <!-- SCREEN 3 · MODULES -->
+      <section class="screen" id="s-modules">
+        <div class="head">
+          <h1>Modüller · Модули 📚</h1>
+          <p>Все уроки курса — вернись к любому</p>
+        </div>
+        <div id="moduleList"></div>
+      </section>
+
+      <!-- SCREEN 4 · PROFILE -->
+      <section class="screen" id="s-profile">
+        <div class="profile-head">
+          <div class="avatar">I</div>
+          <h2>Imran</h2>
+          <div class="badge">A1 · Kencetay</div>
+        </div>
+        <div class="kicker">Настройки</div>
+        <div class="card" style="padding:4px 6px;">
+          <div class="setting">
+            <div class="si">🔔</div><div class="sl">Уведомления</div>
+            <button class="switch on" aria-label="Уведомления" onclick="this.classList.toggle('on')"></button>
+          </div>
+          <div class="setting">
+            <div class="si">🌙</div><div class="sl">Тёмная тема</div>
+            <button class="switch" aria-label="Тёмная тема" onclick="this.classList.toggle('on')"></button>
+          </div>
+          <div class="setting"><div class="si">🌐</div><div class="sl">Язык интерфейса</div><div class="sv">Русский ›</div></div>
+          <div class="setting"><div class="si">🎯</div><div class="sl">Цель в день</div><div class="sv">15 мин ›</div></div>
+        </div>
+        <div class="kicker">О приложении</div>
+        <div class="card" style="padding:4px 6px;">
+          <div class="setting"><div class="si">❓</div><div class="sl">Помощь и вопросы</div><div class="sv">›</div></div>
+          <div class="setting"><div class="si">ℹ️</div><div class="sl">Версия</div><div class="sv">1.0.0</div></div>
+          <div class="setting"><div class="si">⭐</div><div class="sl">Оценить «Laf et»</div><div class="sv">›</div></div>
+        </div>
+        <div style="padding:0 6px;font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:12px;font-weight:600;">
+          Laf et — премиальное приложение для изучения крымскотатарского языка. Один код на Flutter — iOS и Android.
+        </div>
+        <button class="logout" id="logoutBtn">Выход</button>
+      </section>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-screen="s-journey"><span class="ni">🏠</span>Путь</button>
+      <button data-screen="s-progress"><span class="ni">📊</span>Прогресс</button>
+      <button data-screen="s-modules"><span class="ni">📚</span>Модули</button>
+      <button data-screen="s-profile"><span class="ni">👤</span>Профиль</button>
+    </nav>
+
+    <div class="sheet-mask" id="sheetMask"></div>
+    <div class="sheet" id="sheet"></div>
+  </div>
+
+  <div class="caption">🗣️ <b>Laf et</b> — интерактивный прототип · нажимай карточки и вкладки</div>
+</div>
+
+<script>
+  const LEVELS = [
+    { id:"A1", name:"A1 — Kencetay", icon:"🌱", color:"#1a3a52", lessons:8, progress:65,
+      desc:"Базовый уровень: алфавит, первые слова, приветствия и простые фразы." },
+    { id:"A2", name:"A2 — Talebe", icon:"📗", color:"#2b7a6b", lessons:6, progress:40,
+      desc:"Предметы, места, числа и падежи. Строим простые предложения." },
+    { id:"B1", name:"B1 — Laf ustası", icon:"🏆", color:"#a5741f", lessons:5, progress:15,
+      desc:"Глаголы, времена, диалоги и чтение небольших текстов." },
+  ];
+  const OVERALL = 40;
+  const LESSONS = {
+    A1:[
+      {n:1,t:"Elifbe — Алфавит",time:12,done:true, words:[["ana","мама"],["baba","папа"],["ev","дом"]]},
+      {n:2,t:"Temel sözler — Базовые слова",time:10,done:true, words:[["kitap","книга"],["qalem","ручка"],["masa","стол"]]},
+      {n:3,t:"Selâmlaşuv — Приветствия",time:11,done:true, words:[["Meraba","Привет"],["Sağ ol","Спасибо"],["Körüşkence","До встречи"]]},
+      {n:4,t:"Tanışuv — Знакомство",time:13,done:false, words:[["Adıñ ne?","Как тебя зовут?"],["Menim adım…","Меня зовут…"]]},
+      {n:5,t:"Sayılar — Числа",time:10,done:false, words:[["bir","один"],["eki","два"],["üç","три"]]},
+      {n:6,t:"Renkler — Цвета",time:12,done:false, words:[["qırmızı","красный"],["kök","синий"],["sarı","жёлтый"]]},
+      {n:7,t:"Vazife — Задание",time:15,done:false, words:[]},
+      {n:8,t:"Oquv — Чтение",time:14,done:false, words:[]},
+    ],
+    A2:[
+      {n:1,t:"Eşyalar — Предметы",time:11,done:true, words:[["defter","тетрадь"],["qapı","дверь"],["pencere","окно"]]},
+      {n:2,t:"Yerler — Места",time:12,done:true, words:[["mektep","школа"],["bazar","рынок"],["park","парк"]]},
+      {n:3,t:"Yer kelişi — Падеж",time:13,done:false, words:[["evde","дома"],["mektepte","в школе"]]},
+      {n:4,t:"Bar / Yoq — Есть и нет",time:10,done:false, words:[["bar","есть"],["yoq","нет"]]},
+      {n:5,t:"Vazife — Задание",time:15,done:false, words:[]},
+      {n:6,t:"Dialog — Диалог",time:14,done:false, words:[]},
+    ],
+    B1:[
+      {n:1,t:"Fiiller — Глаголы",time:13,done:true, words:[["barmaq","идти"],["yazmaq","писать"],["oqumaq","читать"]]},
+      {n:2,t:"Şimdiki zaman — Настоящее",time:14,done:false, words:[["yazam","пишу"],["oqurım","читаю"]]},
+      {n:3,t:"Sıfatlar — Прилагательные",time:12,done:false, words:[["büyük","большой"],["kiçik","маленький"]]},
+      {n:4,t:"Oquv — Чтение текста",time:15,done:false, words:[]},
+      {n:5,t:"İmtihan — Экзамен",time:15,done:false, words:[]},
+    ],
+  };
+
+  function bar(pct,gold){return '<div class="bar'+(gold?' gold':'')+'"><i data-w="'+pct+'"></i></div>';}
+
+  function renderJourney(){
+    document.getElementById('levelList').innerHTML = LEVELS.map(l=>
+      '<div class="card level tappable" tabindex="0" role="button" onclick="openLevel(\''+l.id+'\')" onkeydown="if(event.key===\'Enter\')openLevel(\''+l.id+'\')">'+
+        '<div class="ic" style="background:linear-gradient(135deg,'+l.color+','+l.color+'cc)">'+l.icon+'</div>'+
+        '<div class="body"><div class="row1"><h3>'+l.name+'</h3><span class="pct">'+l.progress+'%</span></div>'+
+        '<div class="lessons">'+l.lessons+' уроков</div>'+bar(l.progress, l.id==='B1')+'</div>'+
+        '<div class="arrow">›</div></div>').join('');
+  }
+  function renderProgress(){
+    document.getElementById('overallBar').setAttribute('data-w',OVERALL);
+    document.getElementById('progressPerLevel').innerHTML = LEVELS.map((l,i)=>
+      '<div style="'+(i>0?'margin-top:16px;':'')+'"><div style="display:flex;justify-content:space-between;margin-bottom:2px;">'+
+      '<b style="font-size:14px;color:var(--ink)">'+l.icon+' '+l.id+'</b>'+
+      '<b style="font-size:14px;color:'+l.color+'">'+l.progress+'%</b></div>'+bar(l.progress, l.id==='B1')+'</div>').join('');
+    const days=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"], vals=[40,65,50,80,60,25,95];
+    document.getElementById('weekbars').innerHTML = days.map((d,i)=>
+      '<div class="col"><i data-h="'+vals[i]+'" style="height:0"></i><small>'+d+'</small></div>').join('');
+  }
+  function renderModules(){
+    document.getElementById('moduleList').innerHTML = LEVELS.map(l=>
+      '<div class="mod-group"><div class="kicker" style="margin-top:14px;">'+l.icon+' Уровень '+l.id+' · '+l.name.split('—')[1].trim()+'</div>'+
+      LESSONS[l.id].map(ls=>
+        '<div class="card lesson tappable '+(ls.done?'done':'')+'" tabindex="0" role="button" onclick="openLesson(\''+l.id+'\','+ls.n+')" onkeydown="if(event.key===\'Enter\')openLesson(\''+l.id+'\','+ls.n+')">'+
+        '<div class="num">'+(ls.done?'✓':ls.n)+'</div>'+
+        '<div class="info"><h4>'+ls.t+'</h4><small>'+ls.time+' мин'+(ls.done?' · пройдено':'')+'</small></div>'+
+        '<div class="chev">›</div></div>').join('')+'</div>').join('');
+  }
+  function animateBars(scope){
+    scope.querySelectorAll('.bar > i[data-w]').forEach(el=>{ requestAnimationFrame(()=>{ el.style.width = el.getAttribute('data-w')+'%'; }); });
+    scope.querySelectorAll('.weekbars i[data-h]').forEach(el=>{ requestAnimationFrame(()=>{ el.style.transition='height .8s cubic-bezier(.2,.7,.2,1)'; el.style.height = el.getAttribute('data-h')+'%'; }); });
+  }
+  function switchScreen(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active', s.id===id));
+    document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active', b.dataset.screen===id));
+    const scr=document.getElementById(id); scr.scrollTop=0; animateBars(scr);
+  }
+  document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>switchScreen(b.dataset.screen)));
+
+  function showSheet(html){
+    document.getElementById('sheet').innerHTML = '<div class="grip"></div>'+html;
+    document.getElementById('sheet').classList.add('show');
+    document.getElementById('sheetMask').classList.add('show');
+  }
+  function closeSheet(){
+    document.getElementById('sheet').classList.remove('show');
+    document.getElementById('sheetMask').classList.remove('show');
+  }
+  window.openLevel = function(id){
+    const l=LEVELS.find(x=>x.id===id);
+    showSheet('<div class="s-ic" style="background:linear-gradient(135deg,'+l.color+','+l.color+'cc)">'+l.icon+'</div>'+
+      '<h3>'+l.name+'</h3><div class="s-meta">'+l.lessons+' уроков · прогресс '+l.progress+'%</div>'+
+      '<p class="desc">'+l.desc+'</p>'+bar(l.progress, id==='B1')+
+      '<button class="s-btn" onclick="closeSheet();switchScreen(\'s-modules\')">Открыть уроки уровня</button>');
+    requestAnimationFrame(()=>animateBars(document.getElementById('sheet')));
+  };
+  window.openLesson = function(levelId,n){
+    const ls=LESSONS[levelId].find(x=>x.n===n);
+    const words = ls.words.length
+      ? ls.words.map(w=>'<div class="word-row"><b>'+w[0]+'</b><span>'+w[1]+'</span></div>').join('')
+      : '<p class="desc">Интерактивное упражнение этого урока: подбор, тест и практика на скорость.</p>';
+    showSheet('<div class="s-ic">'+(ls.done?'✓':n)+'</div><h3>'+ls.t+'</h3>'+
+      '<div class="s-meta">Уровень '+levelId+' · '+ls.time+' мин · '+(ls.done?'пройдено':'не начато')+'</div>'+
+      (ls.words.length?'<div style="margin-top:16px;font-weight:800;color:var(--muted);font-size:12px;letter-spacing:1px;">СЛОВАРЬ УРОКА</div>':'')+
+      '<div style="margin-top:6px;">'+words+'</div>'+
+      '<button class="s-btn '+(ls.done?'gold':'')+'" onclick="closeSheet()">'+(ls.done?'Повторить урок':'Начать · Başla!')+'</button>');
+  };
+  window.closeSheet = closeSheet;
+  window.switchScreen = switchScreen;
+  document.getElementById('sheetMask').addEventListener('click', closeSheet);
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    const s=document.getElementById('sheet');
+    showSheet('<div class="s-ic" style="background:linear-gradient(135deg,#d64545,#e07055)">↩</div><h3>Выход из аккаунта</h3>'+
+      '<div class="s-meta">Демо-режим прототипа</div><p class="desc">В реальном приложении здесь произойдёт выход из профиля Imran.</p>'+
+      '<button class="s-btn" onclick="closeSheet()">Остаться</button>');
+  });
+
+  function tick(){
+    const d=new Date();
+    document.getElementById('clock').textContent =
+      d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+  }
+  renderJourney(); renderProgress(); renderModules();
+  tick(); setInterval(tick,10000);
+  animateBars(document.getElementById('s-journey'));
+</script>
